@@ -1,7 +1,9 @@
 FROM debian:jessie
 MAINTAINER Tony Fouchard
 
-ENV WK_DIR /root
+ENV WK_DIR /root/nginx
+ENV CREATE_WKDIR 1
+ENV RM_WKDIR 1
 ENV OPENSSL_TARGZ_LINK https://www.openssl.org/source/openssl-1.0.2f.tar.gz
 ENV LUAJIT_TARGZ_LINK http://luajit.org/download/LuaJIT-2.0.1.tar.gz
 ENV NGXDEVELKIT_TARGZ_LINK https://github.com/simpl/ngx_devel_kit/archive/v0.2.19.tar.gz
@@ -10,6 +12,7 @@ ENV NGINX_TARGZ_LINK http://nginx.org/download/nginx-1.9.10.tar.gz
 ENV NGINX_USER nginx
 ENV NGINX_GROUP nginx
 
+RUN [ ${CREATE_WKDIR} -eq 1 ] && mkdir -p ${WK_DIR}
 WORKDIR ${WK_DIR}
 
 RUN groupadd ${NGINX_GROUP}
@@ -67,5 +70,6 @@ RUN cd ${WK_DIR}/$(echo "${NGINX_TARGZ_LINK}" | sed -e 's/^.*\/\(.*\)\.tar\.gz/\
 RUN cd ${WK_DIR}/$(echo "${NGINX_TARGZ_LINK}" | sed -e 's/^.*\/\(.*\)\.tar\.gz/\1/g') && make -j2 && make install
 
 RUN apt-get remove -y build-essential
+RUN [ ${RM_WKDIR} -eq 1 ] && rm -rf ${WK_DIR}
 
 CMD ["/usr/sbin/nginx"]
