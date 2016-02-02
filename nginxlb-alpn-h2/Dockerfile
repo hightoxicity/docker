@@ -12,7 +12,7 @@ ENV NGINX_TARGZ_LINK http://nginx.org/download/nginx-1.9.10.tar.gz
 ENV NGINX_USER nginx
 ENV NGINX_GROUP nginx
 
-RUN [ ${CREATE_WKDIR} -eq 1 ] && mkdir -p ${WK_DIR}
+RUN [ ${CREATE_WKDIR} -eq 1 ] && mkdir -p ${WK_DIR} || /bin/true
 WORKDIR ${WK_DIR}
 
 RUN groupadd ${NGINX_GROUP}
@@ -70,6 +70,6 @@ RUN cd ${WK_DIR}/$(echo "${NGINX_TARGZ_LINK}" | sed -e 's/^.*\/\(.*\)\.tar\.gz/\
 RUN cd ${WK_DIR}/$(echo "${NGINX_TARGZ_LINK}" | sed -e 's/^.*\/\(.*\)\.tar\.gz/\1/g') && make -j2 && make install
 
 RUN apt-get remove -y build-essential
-RUN [ ${RM_WKDIR} -eq 1 ] && rm -rf ${WK_DIR}
+RUN [ ${RM_WKDIR} -eq 1 ] && rm -rf ${WK_DIR} || /bin/true
 
 CMD ["/usr/sbin/nginx"]
