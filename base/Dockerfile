@@ -45,15 +45,16 @@ RUN mkdir /confmgt/temp
 COPY attributes/ /confmgt/temp/attributes/
 RUN date +%s > /confmgt/temp/now
 RUN mkdir /confmgt/attributes/$(cat /confmgt/temp/now)
-RUN cp -r /confmgt/temp/attributes/* /confmgt/attributes/$(cat /confmgt/temp/now)
+RUN cp -r /confmgt/temp/attributes/* /confmgt/attributes/$(cat /confmgt/temp/now) || /bin/true
 RUN /confmgt/bin/gen_conf.sh
 RUN rm -rf /confmgt/temp
 
 ONBUILD RUN mkdir /confmgt/temp
 ONBUILD COPY attributes/ /confmgt/temp/attributes/
+ONBUILD COPY confd /confmgt/confd
 ONBUILD RUN date +%s > /confmgt/temp/now
 ONBUILD RUN mkdir /confmgt/attributes/$(cat /confmgt/temp/now)
-ONBUILD RUN cp -r /confmgt/temp/attributes/* /confmgt/attributes/$(cat /confmgt/temp/now)
+ONBUILD RUN cp -r /confmgt/temp/attributes/* /confmgt/attributes/$(cat /confmgt/temp/now) || /bin/true
 ONBUILD RUN /confmgt/bin/gen_conf.sh
 ONBUILD RUN rm -rf /confmgt/temp
 
