@@ -1,4 +1,5 @@
-FROM debian:jessie
+FROM base:latest
+#FROM debian:jessie
 MAINTAINER Tony Fouchard
 
 ENV WK_DIR /root/nginx
@@ -72,4 +73,4 @@ RUN cd ${WK_DIR}/$(echo "${NGINX_TARGZ_LINK}" | sed -e 's/^.*\/\(.*\)\.tar\.gz/\
 RUN apt-get remove -y build-essential
 RUN [ ${RM_WKDIR} -eq 1 ] && rm -rf ${WK_DIR} || /bin/true
 
-CMD ["/usr/sbin/nginx"]
+CMD ["/confmgt/bin/gen_conf.sh"]
