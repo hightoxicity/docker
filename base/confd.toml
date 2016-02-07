@@ -1,0 +1,6 @@
+backend = "env"
+confdir = "/confmgt/confd"
+log-level = "debug"
+noop = false
+prefix = "/"
+watch = false
