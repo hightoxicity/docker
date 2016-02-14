@@ -14,6 +14,7 @@ RUN mkdir -p /confmgt/attributes
 RUN mkdir -p /confmgt/confd/templates
 RUN mkdir -p /confmgt/confd/conf.d
 COPY confd /confmgt/confd
+COPY files /
 
 RUN apt-get update && apt-get install -y wget
 
@@ -49,6 +50,7 @@ RUN cp -r /confmgt/temp/attributes/* /confmgt/attributes/$(cat /confmgt/temp/now
 RUN /confmgt/bin/gen_conf.sh
 RUN rm -rf /confmgt/temp
 
+ONBUILD COPY files /
 ONBUILD RUN mkdir /confmgt/temp
 ONBUILD COPY attributes/ /confmgt/temp/attributes/
 ONBUILD COPY confd /confmgt/confd
