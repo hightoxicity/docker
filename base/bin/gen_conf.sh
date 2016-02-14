@@ -11,6 +11,11 @@ fi
 SERVICES_DATA=${SERVICES_DATA}; /confmgt/bin/attr_merger.sh
 export SERVICES_DATA=$(cat /confmgt/attributes.json)
 
+CONTAINER_IP=$(awk 'NR==1 {print $1}' /etc/hosts)
+export SERVICES_DATA=$(echo ${SERVICES_DATA} | /confmgt/bin/jq ". + {\"container\":{\"ip\": \"${CONTAINER_IP}\"}}")
+
+echo ${SERVICES_DATA}
+
 /confmgt/bin/confd -onetime -backend env
 
 echo "We are about to run: $BIN"
