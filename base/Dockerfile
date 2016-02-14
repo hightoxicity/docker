@@ -16,7 +16,7 @@ RUN mkdir -p /confmgt/confd/conf.d
 COPY confd /confmgt/confd
 COPY files /
 
-RUN apt-get update && apt-get install -y wget
+RUN apt-get update && apt-get install -y wget tree
 
 RUN echo 'Downloading and installing yaml2json...'
 RUN wget https://github.com/bronze1man/yaml2json/blob/master/builds/linux_amd64/yaml2json?raw=true -O yaml2json
@@ -54,6 +54,7 @@ ONBUILD COPY files /
 ONBUILD RUN mkdir /confmgt/temp
 ONBUILD COPY attributes/ /confmgt/temp/attributes/
 ONBUILD COPY confd /confmgt/confd
+ONBUILD RUN tree /confmgt/
 ONBUILD RUN date +%s > /confmgt/temp/now
 ONBUILD RUN mkdir /confmgt/attributes/$(cat /confmgt/temp/now)
 ONBUILD RUN cp -r /confmgt/temp/attributes/* /confmgt/attributes/$(cat /confmgt/temp/now) || /bin/true
